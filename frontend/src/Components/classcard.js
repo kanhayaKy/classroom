@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     borderRadius: 16,
   },
   media: {
-    height: 96,
+    minHeight: 96,
     display: "block",
     backgroundColor: yellow[200],
   },
@@ -34,7 +34,11 @@ export default function ClassCard(props) {
   return (
     <Card className={classes.root} variant="outlined">
       <CardActions className={classes.media}>
-        <Button size="small" color="secondary">
+        <Button
+          onClick={() => props.displayPage("classroom")}
+          size="small"
+          color="secondary"
+        >
           <Typography gutterBottom variant="h5" component="h2">
             {props.class.Title}
           </Typography>{" "}

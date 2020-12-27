@@ -7,13 +7,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import AddIcon from '@material-ui/icons/Add';
-import SERVER_ADDRESS from './../config';
+import SERVER_ADDRESS from '../config';
 
 const base_url = SERVER_ADDRESS
 export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
   console.log(props.userId)
-  const [title, setTitle] = React.useState("");
+  const [classCode, setClassCode] = React.useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -24,12 +24,11 @@ export default function FormDialog(props) {
   };
 
   const handleChange = (event) => {
-    setTitle(event.target.value);
-    console.log(title)
+    setClassCode(event.target.value);
+    console.log(classCode)
   };
 
   const createClassroom = () => {
-    console.log(userId)
     fetch(base_url + "classes/", {
       crossDomain: true,
       withCredentials: true,
@@ -40,22 +39,19 @@ export default function FormDialog(props) {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
-        "Title": title ,
-        "IsActive": true,
-        "Faculty": props.userId,
-        "Students": [],
-        "Materials": []
+        
       })
     })
       .then((res) => res.json())
       .then(()  => {
-        setTitle("");
+        classCode("");
         props.created();
       })
       .catch((err) => {
         console.log(err);
       });
 
+      props.ClassRoomAdded()
       handleClose();
       
   };
@@ -73,7 +69,7 @@ export default function FormDialog(props) {
         <DialogTitle id="form-dialog-title">Create </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Enter the title of the classroom
+            Enter the code of the classroom
           </DialogContentText>
           <TextField
             autoFocus
@@ -82,7 +78,7 @@ export default function FormDialog(props) {
             label="Title"
             type="text"
             fullWidth
-            value={title}
+            value={classCode}
             onChange={handleChange}
           />
         </DialogContent>

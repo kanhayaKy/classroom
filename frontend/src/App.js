@@ -3,6 +3,7 @@ import "./App.css";
 import CustomNavBar from "./Components/NavBar.js";
 import LoginForm from "./Components/Accounts/LoginUser";
 import RegisterForm from "./Components/Accounts/RegisterUser";
+import Classroom from "./Components/Classroom"
 
 import Home from "./Components/Home";
 import SERVER_ADDRESS from "./config";
@@ -17,6 +18,8 @@ class App extends Component {
       logged_in: localStorage.getItem("token") ? true : false,
       username: "",
       userId: "",
+      isFaculty: "",
+      classes: [],
       displayed_page: "",
     };
   }
@@ -31,16 +34,21 @@ class App extends Component {
       })
         .then((res) => res.json())
         .then((resp) => {
-          this.setState({ username: resp.username , userId : resp.id});
+          this.setState({
+            username: resp.username,
+            userId: resp.id,
+            isFaculty: resp.Role === "TR" ? true : false,
+          });
+          this.getClasses();
         })
         .catch((err) => console.log(err));
     }
   }
 
-  display_page = (formName) => {
-    console.log(formName);
+  display_page = (page) => {
+    console.log(page);
     this.setState({
-      displayed_page: formName,
+      displayed_page: page,
     });
   };
 
@@ -70,12 +78,15 @@ class App extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
+        console.log(json.user.Role === "TR");
         localStorage.setItem("token", json.token);
         this.setState({
           logged_in: true,
           username: json.user.username,
-          userId:json.user.id,
+          userId: json.user.id,
+          isFaculty: json.user.Role === "TR" ? true : false,
         });
+        this.getClasses();
       })
       .catch((error) => {
         console.log(error);
@@ -85,7 +96,31 @@ class App extends Component {
     });
   };
 
-  renderSwitch(param) {
+  getClasses = () => {
+    console.log("This got in to the classs")
+    if (this.state.logged_in) {
+      fetch(base_url + "classes/", {
+        crossDomain: true,
+        async: true,
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((resp) => {
+          console.log(resp);
+          this.setState({
+            classes: [...resp],
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  renderSwitch(param , classId = 0) {
     switch (param) {
       case "login":
         return (
@@ -99,16 +134,34 @@ class App extends Component {
       case "register":
         return <RegisterForm />;
       case "home":
-        return <Home logged_in = {this.state.logged_in} username={this.state.username} />;
+        return (
+          <Home
+            logged_in={this.state.logged_in}
+            username={this.state.username}
+            classes={this.state.classes}
+          />
+        );
+      
+      case "classroom":
+        return <Classroom 
+            classroomId = {classId}
+            
+        />
       default:
-        return <Home logged_in = {this.state.logged_in} username={this.state.username} />;
+        return (
+          <Home
+            logged_in={this.state.logged_in}
+            username={this.state.username}
+            classes={this.state.classes}
+            displayPage={this.display_page}
+
+          />
+        );
     }
   }
 
-  
   render() {
-  const { logged_in, username , userId } = this.state;
-  console.log(userId);
+    const { logged_in, username, userId, isFaculty } = this.state;
     return (
       <div>
         <CustomNavBar
@@ -118,12 +171,13 @@ class App extends Component {
           handleLogout={this.handleLogout}
           username={username}
           userId={userId}
-          handleNewClass={() => this.display_page('home')}
+          isFaculty={isFaculty}
+          handleNewClass={() => this.display_page("home")}
           display_page={this.display_page}
+          ClassRoomAdded={this.getClasses}
         />
 
         {this.renderSwitch(this.state.displayed_page)}
-        
       </div>
     );
   }

@@ -1,10 +1,10 @@
 from . serializers import *
-from rest_framework.views import APIView
+from rest_framework.views import APIView 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import permissions
 from django.shortcuts import render
-from rest_framework import status , generics
+from rest_framework import status , generics , mixins
 from . models import ClassRoom
 
 
@@ -13,7 +13,10 @@ class ClassRoomList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
     def get_queryset(self):
-        return ClassRoom.objects.filter(Students = self.request.user) or ClassRoom.objects.filter(Faculty = self.request.user)
+        if self.request.user.Role == "TR":
+            return ClassRoom.objects.filter(Faculty = self.request.user)
+        else:
+            return ClassRoom.objects.filter(Students = self.request.user) 
     
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -30,6 +33,7 @@ class ClassRoomDetail(generics.RetrieveUpdateDestroyAPIView):
             return ClassRoomListSerializer
         else:
             return ClassRoomSerializer
+
 #Material views
 class MaterialList(generics.ListCreateAPIView):
     queryset = Material.objects.all()

@@ -14,7 +14,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
 import { red } from "@material-ui/core/colors";
-import CreateClassForm from "./../Components/CreateClass"
+import CreateClassForm from "./../Components/CreateJoinClassForm.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,11 +75,22 @@ export default function CustomAppBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Classroom
-          </Typography>
+          <Button
+                onClick={() => props.display_page("home")}
+                color="inherit"
+              >
+                Classroom
+              </Button>          </Typography>
           {auth && (
             <div>
-              <Button color="inherit"> <CreateClassForm userId = {props.userId}  created={props.handleNewClass}/> </Button>
+              <Button color="inherit">
+                {" "}
+                <CreateClassForm
+                  userId={props.userId}
+                  isFaculty={props.isFaculty}
+                  ClassRoomAdded={props.ClassRoomAdded}
+                />{" "}
+              </Button>
               <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -88,7 +99,7 @@ export default function CustomAppBar(props) {
                 color="inherit"
               >
                 <Avatar aria-label="recipe" className={classes.avatar}>
-                  {props.username ? props.username[0]: null}
+                  {props.username ? props.username[0] : null}
                 </Avatar>{" "}
               </IconButton>
               <Menu

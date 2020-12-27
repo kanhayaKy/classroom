@@ -59,7 +59,7 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ os.path.join(PROJECT_ROOT, 'templates').replace('\\','/'),],
+        'DIRS': [os.path.join(PROJECT_ROOT, 'templates').replace('\\', '/'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,11 +94,11 @@ CORS_ORIGIN_WHITELIST = (
 CORS_ALLOW_CREDENTIALS = True
 
 
-
 # JWT Auth
 
 JWT_AUTH = {
-    'JWT_RESPONSE_PAYLOAD_HANDLER' :  'classroom.utils.custom_jwt_response_handler',
+    'JWT_RESPONSE_PAYLOAD_HANDLER':  'classroom.utils.custom_jwt_response_handler',
+    'JWT_VERIFY_EXPIRATION': False,
 }
 
 

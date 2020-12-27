@@ -15,7 +15,7 @@ class StreamSerializer(sz.ModelSerializer):
 class GetFullUserSerializer(sz.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','UID','username','is_superuser','first_name', 'last_name' )
+        fields = ('id','UID','username','is_superuser','first_name', 'last_name','Role', )
 
 
 class ClassRoomSerializer(sz.ModelSerializer):
@@ -24,13 +24,28 @@ class ClassRoomSerializer(sz.ModelSerializer):
         model = ClassRoom
         fields = '__all__'
 
+    def update(self , instance , validated_data):
+        students = validated_data.pop('Students', [])
+        materials = validated_data.pop('Materials',[])
+        instance.Title = validated_data.get('Title', instance.Title)
+        instance.isActive = validated_data.get('isActive', instance.isActive)
+        for student in students:
+            instance.Students.add(student)
+        
+        for material in materials:
+            instance.Materials.add(material)
+        
+        instance.save()
+        return instance
+
+
 class ClassRoomListSerializer(sz.ModelSerializer):
-    Students = GetFullUserSerializer(read_only=True,  many=True)
     Faculty = sz.ReadOnlyField(source='Faculty.username')
     class Meta:
         model = ClassRoom
         fields = '__all__'
         depth = 1
+        
 
 
 class UserSerializerWithToken(sz.ModelSerializer):    
@@ -52,6 +67,7 @@ class UserSerializerWithToken(sz.ModelSerializer):
             username = validated_data['username'],
             first_name = validated_data['first_name'],
             last_name = validated_data['last_name'],
+            Role = validated_data['Role']
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -59,4 +75,4 @@ class UserSerializerWithToken(sz.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('token', 'username', 'password','UID', 'first_name','last_name',)
+        fields = ('token', 'username', 'password','UID', 'first_name','last_name','Role')
