@@ -151,6 +151,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.dirname(PROJECT_ROOT)
+
+MEDIA_URL = ''
+
 LOGIN_URL = 'login'
 
 LOGIN_REDIRECT_URL = 'home'

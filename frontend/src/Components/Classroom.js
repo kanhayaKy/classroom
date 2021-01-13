@@ -1,4 +1,4 @@
-import React , {useEffect} from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -6,9 +6,16 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Container from "@material-ui/core/Container";
+import CustomNavBar from "./../Components/NavBar.js";
+import UploadFile from "./UploadFile";
+import Divider from "@material-ui/core/Divider";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import SERVER_ADDRESS from "../config";
-
+import { Redirect, useParams } from "react-router-dom";
+import cover from "../Images/Analyse2.png";
+import pdfThumbnail from "../Images/pdfThumbnail.png";
 // Props needed : classroom Id
 
 const base_url = SERVER_ADDRESS;
@@ -20,14 +27,40 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     paddingTop: "56.25%", // 16:9
   },
+  card: {
+    margin: "2.5rem",
+    opacity: "0",
+  },
+
+  margin: {
+    margin: theme.spacing(2),
+  },
+  title: {
+    fontSize: theme.typography.pxToRem(70),
+    color: theme.palette.text.primary,
+    padding: "3rem 12rem",
+  },
+  height: {
+    margin: "1rem 0",
+    display: "flex",
+    flexDirection: "column",
+  },
+  filePreview: {
+    display: "block",
+    margin: "1rem",
+  },
   topCard: {
-    backgroundColor: "#cfe8fc",
+    backgroundImage: `url(${cover})`,
+    backgroundRepeat: "no-repeat",
+    backgroundAttachment: "scroll",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
     height: "35vh",
     maxWidth: "70%",
     margin: "6vh auto",
   },
   heading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(18),
     flexBasis: "33.33%",
     flexShrink: 0,
   },
@@ -35,24 +68,100 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
+  fileCard: {
+    display: "flex",
+  },
+  details: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  content: {
+    flex: "1 0 auto",
+  },
+  cover: {
+    width: 151,
+  },
 }));
 
 export default function ControlledAccordions(props) {
   const classes = useStyles();
+  const [classDetail, setClassDetail] = React.useState({});
   const [expanded, setExpanded] = React.useState(false);
-  const [id , setId] = React.useState(props.id);
+  const { id } = useParams();
 
   useEffect(() => {
-    console.log(
-      "This only happens ONCE.  But it happens AFTER the initial render."
-    );
+    classRoomDetails();
   }, []);
 
+ 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const openClassroom = () => {
+  const onpenFile = (url) => {
+    window.open(base_url + url);
+  };
+
+  const renderMaterials = () => {
+    if (classDetail.materials) {
+      const materials = classDetail.materials
+        .slice(0)
+        .reverse()
+        .map((material, i) => (
+          <Accordion
+            className={classes.height}
+            expanded={expanded === `panel${i}`}
+            onChange={handleChange(`panel${i}`)}
+            key={i}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={`panel${i}bh-content`}
+              id={`panel${i}bh-header`}
+            >
+              <Typography className={classes.heading}>
+                {material.Title}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails className={classes.details}>
+              <Typography className={classes.secondaryHeading}>
+                {material.Description}
+              </Typography>
+              {material.Content && (
+                <div onClick={() => onpenFile(material.Content)}>
+                  <Card className={classes.fileCard}>
+                    <div className={classes.details}>
+                      <CardContent className={classes.content}>
+                        <Typography component="h5" variant="h5">
+                          {material.Title}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="textSecondary"
+                        ></Typography>
+                      </CardContent>
+                    </div>
+                    <CardMedia
+                      className={classes.cover}
+                      image={
+                        material.Content.slice(-3) === "pdf"
+                          ? pdfThumbnail
+                          : base_url + material.Content
+                      }
+                      title={material.Description}
+                    />
+                  </Card>
+                </div>
+              )}
+            </AccordionDetails>
+          </Accordion>
+        ));
+
+      return materials;
+    }
+  };
+
+  const classRoomDetails = () => {
     fetch(base_url + `classes/${id}`, {
       crossDomain: true,
       withCredentials: true,
@@ -63,8 +172,10 @@ export default function ControlledAccordions(props) {
       },
     })
       .then((response) => response.json())
-      .then((classDetail) => {
-        console.log(classDetail);
+      .then((classDetails) => {
+        if (classDetails.detail === "Not found")
+          console.log(classDetails.detail);
+        setClassDetail(classDetails);
       })
       .catch((err) => {
         console.log(err);
@@ -73,39 +184,27 @@ export default function ControlledAccordions(props) {
 
   return (
     <>
-      {openClassroom(1)}
+      <CustomNavBar
+        Navtitle={classDetail.Title}
+        logged_in={props.logged_in}
+        classes={props.classes}
+        user={props.user}
+      />
       <Container className={classes.topCard} maxWidth="md">
-        <Typography component="div" style={{}} />
-        <CardMedia
-          className={classes.media}
-          image="../../static/Images/Fox in the Jungle.png"
-          title="Paella dish"
-        />
+        <Typography variant="h3" component="h4" className={classes.title}>
+          {classDetail.Title}
+        </Typography>
       </Container>
+
       <Container className={classes.root} maxWidth="sm">
-        <Accordion
-          expanded={expanded === "panel1"}
-          onChange={handleChange("panel1")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <Typography className={classes.heading}>
-              General settings
-            </Typography>
-            <Typography className={classes.secondaryHeading}>
-              I am an accordion
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
+        {props.isFaculty && (
+          <UploadFile
+            classroom={classDetail.id}
+            newMaterial={() => classRoomDetails()}
+          />
+        )}
+        <Divider variant="inset" className={classes.card} />
+        {renderMaterials()}
       </Container>
     </>
   );

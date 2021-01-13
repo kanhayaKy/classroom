@@ -8,6 +8,8 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import { yellow } from "@material-ui/core/colors";
+import { useHistory } from "react-router-dom";
+
 
 const useStyles = makeStyles({
   root: {
@@ -30,12 +32,14 @@ const useStyles = makeStyles({
 
 export default function ClassCard(props) {
   const classes = useStyles();
+  const history = useHistory();
+
 
   return (
     <Card className={classes.root} variant="outlined">
       <CardActions className={classes.media}>
         <Button
-          onClick={() => props.displayPage("classroom")}
+          onClick={() => history.push(`/class/${props.class.id}`)}
           size="small"
           color="secondary"
         >

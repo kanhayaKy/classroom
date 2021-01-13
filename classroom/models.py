@@ -22,7 +22,6 @@ class ClassRoom(models.Model):
     Students = models.ManyToManyField("User" , related_name="classroom_students" , blank=True)
     Faculty = models.ForeignKey("User" , related_name="classroom_faculty", on_delete=models.CASCADE)
     isActive = models.BooleanField(default=True)
-    Materials = models.ManyToManyField("Material" , related_name="classroom_materials" , blank=True)
 
     def __str__(self):
         return self.Title
@@ -40,7 +39,8 @@ class Material(models.Model):
         choices=Type_choices,
         default="Notes",
     )
-    Content = models.FileField(upload_to ='materials/') 
+    classroom =models.ForeignKey("ClassRoom" , related_name="materials" ,on_delete=models.CASCADE, blank=True)
+    Content = models.FileField(upload_to ='materials/',null=True, blank=True) 
     Date = models.DateTimeField(auto_now_add = True)
     Deadline = models.DateTimeField(null=True, blank=True)
 

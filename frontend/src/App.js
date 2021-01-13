@@ -1,12 +1,16 @@
 import React, { Component } from "react";
-import "./App.css";
 import CustomNavBar from "./Components/NavBar.js";
 import LoginForm from "./Components/Accounts/LoginUser";
 import RegisterForm from "./Components/Accounts/RegisterUser";
-import Classroom from "./Components/Classroom"
-
+import Classroom from "./Components/Classroom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Home from "./Components/Home";
+import CreateClassForm from "./Components/CreateJoinClassForm.js";
+import ErrorPage from "./Components/pageNotFound.js";
+
 import SERVER_ADDRESS from "./config";
+
+import "./App.css";
 
 const base_url = SERVER_ADDRESS;
 
@@ -16,11 +20,8 @@ class App extends Component {
 
     this.state = {
       logged_in: localStorage.getItem("token") ? true : false,
-      username: "",
-      userId: "",
-      isFaculty: "",
+      user: {},
       classes: [],
-      displayed_page: "",
     };
   }
 
@@ -35,9 +36,7 @@ class App extends Component {
         .then((res) => res.json())
         .then((resp) => {
           this.setState({
-            username: resp.username,
-            userId: resp.id,
-            isFaculty: resp.Role === "TR" ? true : false,
+            user: resp,
           });
           this.getClasses();
         })
@@ -45,27 +44,16 @@ class App extends Component {
     }
   }
 
-  display_page = (page) => {
-    console.log(page);
-    this.setState({
-      displayed_page: page,
-    });
-  };
-
-  handleLoginChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  };
+  //Authentication functions
 
   handleLogout = () => {
     localStorage.removeItem("token");
     this.setState({ logged_in: false, username: "" });
+    return <Redirect to="/" />;
   };
 
   handleLogin = (e, data) => {
     e.preventDefault();
-    console.log(data);
     fetch(base_url + "token-auth/", {
       crossDomain: true,
       withCredentials: true,
@@ -78,26 +66,20 @@ class App extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log(json.user.Role === "TR");
         localStorage.setItem("token", json.token);
         this.setState({
           logged_in: true,
-          username: json.user.username,
-          userId: json.user.id,
-          isFaculty: json.user.Role === "TR" ? true : false,
+          user: json.user,
         });
         this.getClasses();
       })
       .catch((error) => {
         console.log(error);
       });
-    this.setState({
-      displayed_page: "home",
-    });
   };
 
+  //Get All the classes of the current user
   getClasses = () => {
-    console.log("This got in to the classs")
     if (this.state.logged_in) {
       fetch(base_url + "classes/", {
         crossDomain: true,
@@ -109,7 +91,6 @@ class App extends Component {
       })
         .then((res) => res.json())
         .then((resp) => {
-          console.log(resp);
           this.setState({
             classes: [...resp],
           });
@@ -120,64 +101,74 @@ class App extends Component {
     }
   };
 
-  renderSwitch(param , classId = 0) {
-    switch (param) {
-      case "login":
-        return (
-          <LoginForm
-            handleLogin={this.handleLogin}
-            handleLoginChange={this.handleLoginChange}
-            handleLogout={this.handleLogout}
-            username={this.state.username}
-          />
-        );
-      case "register":
-        return <RegisterForm />;
-      case "home":
-        return (
-          <Home
-            logged_in={this.state.logged_in}
-            username={this.state.username}
-            classes={this.state.classes}
-          />
-        );
-      
-      case "classroom":
-        return <Classroom 
-            classroomId = {classId}
-            
-        />
-      default:
-        return (
-          <Home
-            logged_in={this.state.logged_in}
-            username={this.state.username}
-            classes={this.state.classes}
-            displayPage={this.display_page}
-
-          />
-        );
-    }
-  }
-
   render() {
-    const { logged_in, username, userId, isFaculty } = this.state;
+    const { logged_in, user } = this.state;
     return (
       <div>
-        <CustomNavBar
-          logged_in={logged_in}
-          handleLogin={this.handleLogin}
-          handleLoginChange={this.handleLoginChange}
-          handleLogout={this.handleLogout}
-          username={username}
-          userId={userId}
-          isFaculty={isFaculty}
-          handleNewClass={() => this.display_page("home")}
-          display_page={this.display_page}
-          ClassRoomAdded={this.getClasses}
-        />
+        <Switch>
+          <Route exact path="/">
+            {this.state.logged_in ? (
+              <div>
+                <CustomNavBar
+                  logged_in={logged_in}
+                  user={this.state.user}
+                  Navtitle="Classroom"
+                  classes={this.state.classes}
+                  addComponent={
+                    <CreateClassForm
+                      userId={user.id}
+                      isFaculty={user.Role === "TR" ? true : false}
+                      ClassRoomAdded={this.getClasses}
+                    />
+                  }
+                />
+                <Home
+                  logged_in={this.state.logged_in}
+                  user={this.state.user}
+                  classes={this.state.classes}
+                />
+              </div>
+            ) : (
+              <Redirect to="/login" />
+            )}
+          </Route>
 
-        {this.renderSwitch(this.state.displayed_page)}
+          <Route path="/register">
+            {this.state.logged_in ? (
+              <Redirect to="/" />
+            ) : (
+              <>
+                <CustomNavBar Navtitle="Classroom" />
+
+                <RegisterForm history={this.history} />
+              </>
+            )}
+          </Route>
+
+          <Route path="/login">
+            {this.state.logged_in ? (
+              <Redirect to="/" />
+            ) : (
+              <>
+                <CustomNavBar Navtitle="Classroom" />
+                <LoginForm handleLogin={this.handleLogin} />
+              </>
+            )}
+          </Route>
+
+          <Route path="/logout">{this.handleLogout}</Route>
+
+          <Route path="/class/:id">
+            <Classroom
+              logged_in={logged_in}
+              user={this.state.user}
+              classes={this.state.classes}
+              isFaculty={user.Role === "TR" ? true : false}
+            />
+          </Route>
+
+          <Route render={() => <ErrorPage />} />
+        </Switch>
       </div>
     );
   }

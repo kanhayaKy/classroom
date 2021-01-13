@@ -10,6 +10,7 @@ import AddIcon from "@material-ui/icons/Add";
 import SERVER_ADDRESS from "../config";
 
 const base_url = SERVER_ADDRESS;
+
 export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [input, setInput] = React.useState("");
@@ -24,7 +25,6 @@ export default function FormDialog(props) {
 
   const handleChange = (event) => {
     setInput(event.target.value);
-    console.log(input);
   };
 
   const createClassroom = () => {
@@ -48,13 +48,12 @@ export default function FormDialog(props) {
       .then((res) => res.json())
       .then(() => {
         setInput("");
-        props.created();
+        props.ClassRoomAdded();
       })
       .catch((err) => {
         console.log(err);
       });
 
-    props.ClassRoomAdded();
     handleClose();
   };
 
@@ -85,8 +84,6 @@ export default function FormDialog(props) {
   return (
     <div>
       <Button
-        variant="circular"
-        borderRadius="50%"
         size="large"
         color="inherit"
         onClick={handleClickOpen}

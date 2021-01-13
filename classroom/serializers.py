@@ -19,10 +19,10 @@ class GetFullUserSerializer(sz.ModelSerializer):
 
 
 class ClassRoomSerializer(sz.ModelSerializer):
-
     class Meta:
         model = ClassRoom
         fields = '__all__'
+
 
     def update(self , instance , validated_data):
         students = validated_data.pop('Students', [])
@@ -41,9 +41,15 @@ class ClassRoomSerializer(sz.ModelSerializer):
 
 class ClassRoomListSerializer(sz.ModelSerializer):
     Faculty = sz.ReadOnlyField(source='Faculty.username')
+    materials = sz.SerializerMethodField()
+
+    def get_materials(self , instance):
+        queryset=instance.materials.all()
+        serialzer=MaterialSerializer(queryset, many=True)
+        return serialzer.data
     class Meta:
         model = ClassRoom
-        fields = '__all__'
+        fields = ('id' , 'Title','Students','Faculty','isActive','materials')
         depth = 1
         
 

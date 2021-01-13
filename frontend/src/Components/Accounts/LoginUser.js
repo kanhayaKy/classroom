@@ -7,6 +7,7 @@ class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      username:"",
       password: "",
     };
   }
@@ -23,7 +24,7 @@ class LoginForm extends React.Component {
         <Form
           onSubmit={(event) =>
             this.props.handleLogin(event, {
-              username: this.props.username,
+              username: this.state.username,
               password: this.state.password,
             })
           }
@@ -34,8 +35,8 @@ class LoginForm extends React.Component {
           <Form.Group controlId="formPlaintextEmail" className="center">
             <Form.Label>Username</Form.Label>
             <Form.Control type="text" placeholder="Username" 
-              onChange={this.props.handleLoginChange}
-              value={this.props.username} name="username" />
+              onChange={this.handleChange}
+              value={this.state.username} name="username" />
           </Form.Group>
 
           <Form.Group controlId="formPlaintextPassword">
