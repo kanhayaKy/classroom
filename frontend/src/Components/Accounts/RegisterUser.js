@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import SERVER_ADDRESS from "./../../config";
 import { Redirect } from "react-router-dom";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const base_url = SERVER_ADDRESS;
 class RegisterForm extends React.Component {
@@ -16,13 +17,14 @@ class RegisterForm extends React.Component {
       username: "",
       uid: "",
       password: "",
+      checked: false,
       submitted: false,
     };
   }
 
   sendRegistration = (event) => {
     event.preventDefault();
-    const { first_name, last_name, username, uid, password } = this.state;
+    const { first_name, last_name, username, uid, password , checked} = this.state;
     Axios.post(base_url + "users/create", {
       user: {
         UID: uid,
@@ -30,7 +32,7 @@ class RegisterForm extends React.Component {
         last_name: last_name,
         username: username,
         password: password,
-        Role: "ST",
+        Role: checked ?"TR" :"ST",
       },
     })
       .then((response) => {
@@ -48,10 +50,18 @@ class RegisterForm extends React.Component {
 
   changeHandler = (event) => {
     event.preventDefault();
+    console.log(event)
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
+
+  checkHandler = (event) => {
+    
+    this.setState({
+      checked:event.target.checked,
+    })
+  }
 
   clearForm = () => {
     this.setState({
@@ -60,6 +70,7 @@ class RegisterForm extends React.Component {
       username: "",
       password: "",
       uid: "",
+      checked: "",
     });
   };
 
@@ -71,6 +82,15 @@ class RegisterForm extends React.Component {
           noValidate
           className="register-form form-box"
         >
+          <Form.Group controlId="formPlaintextEmail" className="center">
+            <Form.Label>Faculty</Form.Label>
+            <Checkbox
+              name="checked"
+              checked={this.state.checked}
+              onChange={this.checkHandler}
+              inputProps={{ "aria-label": "primary checkbox" }}
+            />
+          </Form.Group>
           <Form.Group controlId="formPlaintextEmail" className="center">
             <Form.Label>First Name</Form.Label>
             <Form.Control

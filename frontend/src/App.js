@@ -116,8 +116,8 @@ class App extends Component {
                   classes={this.state.classes}
                   addComponent={
                     <CreateClassForm
-                      userId={user.id}
-                      isFaculty={user.Role === "TR" ? true : false}
+                      userId={user?.id}
+                      isFaculty={user?.Role === "TR" ? true : false}
                       ClassRoomAdded={this.getClasses}
                     />
                   }

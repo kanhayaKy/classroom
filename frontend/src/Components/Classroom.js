@@ -7,14 +7,17 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Container from "@material-ui/core/Container";
 import CustomNavBar from "./../Components/NavBar.js";
+import Button from "@material-ui/core/Button";
 import UploadFile from "./UploadFile";
 import Divider from "@material-ui/core/Divider";
 import Card from "@material-ui/core/Card";
+import DeleteIcon from "@material-ui/icons/Delete";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import SERVER_ADDRESS from "../config";
 import { useParams } from "react-router-dom";
 import pdfThumbnail from "../Images/pdfThumbnail.png";
+import { useHistory } from "react-router-dom";
 // Props needed : classroom Id
 
 const base_url = SERVER_ADDRESS;
@@ -49,12 +52,12 @@ const useStyles = makeStyles((theme) => ({
     margin: "1rem",
   },
   topCard: {
-    backgroundColor:"#3f51b5",
-    borderRadius:"2rem",
+    backgroundColor: "#3f51b5",
+    borderRadius: "2rem",
     height: "25vh",
     maxWidth: "45%",
     margin: "6vh auto",
-    textAlign:"center",
+    textAlign: "center",
   },
   heading: {
     fontSize: theme.typography.pxToRem(18),
@@ -78,13 +81,52 @@ const useStyles = makeStyles((theme) => ({
   cover: {
     width: 151,
   },
+  button: {
+    margin: theme.spacing(1),
+  },
 }));
+
+function CloseClassroom(props) {
+  const classes = useStyles();
+  const history = useHistory();
+
+  const deleteClassroom = () => {
+    fetch(base_url+`classes/${props.id}`, {
+      crossDomain: true,
+      withCredentials: true,
+      async: true,
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${localStorage.getItem("token")}`,
+
+      },
+    })
+      .then((resp) => {
+         window.location.reload();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  return (
+    <Button
+      variant="contained"
+      color="secondary"
+      className={classes.button}
+      startIcon={<DeleteIcon />}
+      onClick={deleteClassroom}
+    >
+      Delete
+    </Button>
+  );
+}
 
 export default function ControlledAccordions(props) {
   const classes = useStyles();
   const [classDetail, setClassDetail] = React.useState({});
   const [expanded, setExpanded] = React.useState(false);
   const { id } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     classRoomDetails();
@@ -100,7 +142,7 @@ export default function ControlledAccordions(props) {
   };
 
   const renderMaterials = () => {
-    if (classDetail.materials?.length>0) {
+    if (classDetail.materials?.length > 0) {
       const materials = classDetail.materials
         .slice(0)
         .reverse()
@@ -171,6 +213,7 @@ export default function ControlledAccordions(props) {
   };
 
   const classRoomDetails = () => {
+    
     fetch(base_url + `classes/${id}`, {
       crossDomain: true,
       withCredentials: true,
@@ -182,9 +225,11 @@ export default function ControlledAccordions(props) {
     })
       .then((response) => response.json())
       .then((classDetails) => {
-        if (classDetails.detail === "Not found")
-          console.log(classDetails.detail);
-        setClassDetail(classDetails);
+        console.log(classDetails)
+        if (classDetails.detail)
+            history.push("/");
+        else
+          setClassDetail(classDetails);
       })
       .catch((err) => {
         console.log(err);
@@ -199,6 +244,8 @@ export default function ControlledAccordions(props) {
         classes={props.classes}
         user={props.user}
       />
+
+      {props.isFaculty && <CloseClassroom id ={classDetail.id}/>}
       <Container className={classes.topCard} maxWidth="md">
         <Typography variant="h3" component="h4" className={classes.title}>
           {classDetail.Title}
