@@ -7,7 +7,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import { yellow } from "@material-ui/core/colors";
 import { useHistory } from "react-router-dom";
 
 
@@ -19,15 +18,20 @@ const useStyles = makeStyles({
   media: {
     minHeight: 96,
     display: "block",
-    backgroundColor: yellow[200],
+    backgroundColor: "#3f51b5",
   },
   bottom: {
     alignSelf: "flex-end",
+    color:"#eee"
   },
 
   content: {
     height: 140,
   },
+
+  title :{
+    color:"white",
+  }
 });
 
 export default function ClassCard(props) {
@@ -43,14 +47,13 @@ export default function ClassCard(props) {
           size="small"
           color="secondary"
         >
-          <Typography gutterBottom variant="h5" component="h2">
+          <Typography gutterBottom variant="h5" component="h2" className={classes.title}>
             {props.class.Title}
           </Typography>{" "}
         </Button>
         <Typography
           className={classes.bottom}
           variant="body1"
-          color="textSecondary"
           component="p"
         >
           {props.class.Faculty}{" "}

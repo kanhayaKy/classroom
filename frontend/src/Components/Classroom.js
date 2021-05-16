@@ -14,7 +14,6 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import SERVER_ADDRESS from "../config";
 import { useParams } from "react-router-dom";
-import cover from "../Images/Analyse2.png";
 import pdfThumbnail from "../Images/pdfThumbnail.png";
 // Props needed : classroom Id
 
@@ -37,8 +36,8 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     fontSize: theme.typography.pxToRem(70),
-    color: theme.palette.text.primary,
-    padding: "3rem 12rem",
+    color: "white",
+    padding: "3rem",
   },
   height: {
     margin: "1rem 0",
@@ -50,14 +49,12 @@ const useStyles = makeStyles((theme) => ({
     margin: "1rem",
   },
   topCard: {
-    backgroundImage: `url(${cover})`,
-    backgroundRepeat: "no-repeat",
-    backgroundAttachment: "scroll",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    height: "35vh",
-    maxWidth: "70%",
+    backgroundColor:"#3f51b5",
+    borderRadius:"2rem",
+    height: "25vh",
+    maxWidth: "45%",
     margin: "6vh auto",
+    textAlign:"center",
   },
   heading: {
     fontSize: theme.typography.pxToRem(18),
@@ -103,7 +100,7 @@ export default function ControlledAccordions(props) {
   };
 
   const renderMaterials = () => {
-    if (classDetail.materials) {
+    if (classDetail.materials?.length>0) {
       const materials = classDetail.materials
         .slice(0)
         .reverse()
