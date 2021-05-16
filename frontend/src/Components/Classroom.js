@@ -13,7 +13,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import SERVER_ADDRESS from "../config";
-import { Redirect, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import cover from "../Images/Analyse2.png";
 import pdfThumbnail from "../Images/pdfThumbnail.png";
 // Props needed : classroom Id
@@ -91,9 +91,9 @@ export default function ControlledAccordions(props) {
 
   useEffect(() => {
     classRoomDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
- 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -158,6 +158,18 @@ export default function ControlledAccordions(props) {
         ));
 
       return materials;
+    } else {
+      return (
+        <Accordion disabled>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel3a-content"
+            id="panel3a-header"
+          >
+            <Typography>Nothing yet</Typography>
+          </AccordionSummary>
+        </Accordion>
+      );
     }
   };
 
