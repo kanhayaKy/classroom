@@ -107,7 +107,7 @@ class App extends Component {
       <div>
         <Switch>
           <Route exact path="/">
-            {this.state.logged_in&&this.state.user ? (
+            {this.state.logged_in&&(this.state.user!=='undefined') ? (
               <div>
                 <CustomNavBar
                   logged_in={logged_in}

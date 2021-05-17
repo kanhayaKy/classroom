@@ -88,7 +88,6 @@ const useStyles = makeStyles((theme) => ({
 
 function CloseClassroom(props) {
   const classes = useStyles();
-  const history = useHistory();
 
   const deleteClassroom = () => {
     fetch(base_url+`classes/${props.id}`, {
