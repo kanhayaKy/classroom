@@ -96,8 +96,8 @@ export default function FormDialog(props) {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">
-          {props.isFaculty && <>Create</>}
-          {!props.isFaculty && <>Join</>}{" "}
+          {props.isFaculty && <React.Fragment>Create</React.Fragment>}
+          {!props.isFaculty && <React.Fragment>Join</React.Fragment>}{" "}
         </DialogTitle>
         <DialogContent>
           <DialogContentText></DialogContentText>

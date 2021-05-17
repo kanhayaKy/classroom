@@ -100,7 +100,7 @@ export default function ControlledAccordions(props) {
   };
 
   const renderMaterials = () => {
-    if (classDetail.materials?.length>0) {
+    if (classDetail.materials&& classDetail.length>0) {
       const materials = classDetail.materials
         .slice(0)
         .reverse()
@@ -192,7 +192,7 @@ export default function ControlledAccordions(props) {
   };
 
   return (
-    <>
+    <React.Fragment>
       <CustomNavBar
         Navtitle={classDetail.Title}
         logged_in={props.logged_in}
@@ -215,6 +215,6 @@ export default function ControlledAccordions(props) {
         <Divider variant="inset" className={classes.card} />
         {renderMaterials()}
       </Container>
-    </>
+    </React.Fragment>
   );
 }

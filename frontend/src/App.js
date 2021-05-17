@@ -137,11 +137,11 @@ class App extends Component {
             {this.state.logged_in ? (
               <Redirect to="/" />
             ) : (
-              <>
+              <React.Fragment>
                 <CustomNavBar Navtitle="Classroom" />
 
                 <RegisterForm history={this.history} />
-              </>
+              </React.Fragment>
             )}
           </Route>
 
@@ -149,10 +149,10 @@ class App extends Component {
             {this.state.logged_in ? (
               <Redirect to="/" />
             ) : (
-              <>
+              <React.Fragment>
                 <CustomNavBar Navtitle="Classroom" />
                 <LoginForm handleLogin={this.handleLogin} />
-              </>
+              </React.Fragment>
             )}
           </Route>
 
