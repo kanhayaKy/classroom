@@ -107,7 +107,7 @@ class App extends Component {
       <div>
         <Switch>
           <Route exact path="/">
-            {this.state.logged_in ? (
+            {this.state.logged_in&&this.state.user ? (
               <div>
                 <CustomNavBar
                   logged_in={logged_in}
@@ -116,8 +116,8 @@ class App extends Component {
                   classes={this.state.classes}
                   addComponent={
                     <CreateClassForm
-                      userId={user?.id}
-                      isFaculty={user?.Role === "TR" ? true : false}
+                      userId={user.id}
+                      isFaculty={user.Role === "TR" ? true : false}
                       ClassRoomAdded={this.getClasses}
                     />
                   }
