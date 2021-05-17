@@ -105,7 +105,7 @@ export default function FormDialog(props) {
             autoFocus
             margin="dense"
             id="name"
-            label="Title"
+            label="Enter the class code"
             type="text"
             fullWidth
             value={input}
