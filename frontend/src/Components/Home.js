@@ -36,6 +36,7 @@ function Home(props) {
     <Container fixed>
       <Typography variant="h2" gutterBottom className={classes.heading}>
         Welcome {props.user.username}{" "}
+        <p style={{"font-size":"small"}}>Signed in as {props.user.Role === "ST"? "Student" : "Faculty"}</p>
       </Typography>
 
       <Container>
