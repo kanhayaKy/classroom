@@ -144,7 +144,7 @@ class RegisterForm extends React.Component {
               name="password"
             />
           </Form.Group>
-          {this.state.submitted ? <Redirect to="/login" /> : <></>}
+          {this.state.submitted ? <Redirect to="/login" /> : <React.Fragment/>}
           <div className="submitButton">
             <Button type="submit" variant="primary" size="lg" block>
               Register

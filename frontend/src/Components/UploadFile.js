@@ -82,7 +82,7 @@ export default function CreateMaterial(props) {
   };
 
   return (
-    <>
+    <React.Fragment>
       <Accordion className={classes.margin}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -147,6 +147,6 @@ export default function CreateMaterial(props) {
           </form>
         </AccordionDetails>
       </Accordion>
-    </>
+    </React.Fragment>
   );
 }
