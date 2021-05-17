@@ -141,7 +141,7 @@ export default function ControlledAccordions(props) {
   };
 
   const renderMaterials = () => {
-    if (classDetail.materials&& classDetail.length>0) {
+    if (classDetail.materials&& classDetail.materials.length>0) {
       const materials = classDetail.materials
         .slice(0)
         .reverse()
@@ -249,6 +249,11 @@ export default function ControlledAccordions(props) {
         <Typography variant="h3" component="h4" className={classes.title}>
           {classDetail.Title}
         </Typography>
+        <Typography variant="h5" style={{color:"white"}} >
+          Class Code : {classDetail.id}
+        </Typography>
+        <p style={{color:"#f6ecf0", fontSize:"small"}}>Use the above code to join the classroom</p>
+
       </Container>
 
       <Container className={classes.root} maxWidth="sm">

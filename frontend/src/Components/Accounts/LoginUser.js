@@ -9,6 +9,7 @@ class LoginForm extends React.Component {
     this.state = {
       username:"",
       password: "",
+      error:false,
     };
   }
 
@@ -18,19 +19,37 @@ class LoginForm extends React.Component {
     });
   };
 
+  handleError = () => {
+    console.log("Handling");
+    this.setState({
+      username:"",
+      password:"",
+      error: true,
+    })
+  }
+
+  handleLogin = (event) => {
+
+    const err = this.props.handleLogin(event, {
+      username: this.state.username,
+      password: this.state.password,
+    });
+    if(err){
+      this.handleError();
+    }
+  }
+
   render() {
     return (
       <div className="container">
         <Form
           onSubmit={(event) =>
-            this.props.handleLogin(event, {
-              username: this.state.username,
-              password: this.state.password,
-            })
+             this.handleLogin(event)
           }
           className="form-box"
         >
-            <h1>Hello.! </h1>
+            <h1>Login </h1>
+            {this.state.error && <p className="err">UserName or password invalid</p>}
 
           <Form.Group controlId="formPlaintextEmail" className="center">
             <Form.Label>Username</Form.Label>

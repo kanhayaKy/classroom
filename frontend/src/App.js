@@ -54,6 +54,7 @@ class App extends Component {
 
   handleLogin = (e, data) => {
     e.preventDefault();
+    let auth = true;
     fetch(base_url + "token-auth/", {
       crossDomain: true,
       withCredentials: true,
@@ -64,18 +65,26 @@ class App extends Component {
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
+      .then((response) => { return response.ok? response.json(): null})
       .then((json) => {
-        localStorage.setItem("token", json.token);
-        this.setState({
-          logged_in: true,
-          user: json.user,
-        });
-        this.getClasses();
+        if (json) {
+          localStorage.setItem("token",json.token);
+          this.setState({
+            logged_in: true,
+            user: json.user,
+          });
+          this.getClasses();
+          auth = false;
+          console.log(auth);
+        }
+      
       })
       .catch((error) => {
         console.log(error);
       });
+
+      return auth;
+
   };
 
   //Get All the classes of the current user
@@ -107,7 +116,7 @@ class App extends Component {
       <div>
         <Switch>
           <Route exact path="/">
-            {this.state.logged_in&&(this.state.user!=='undefined') ? (
+            {this.state.logged_in && this.state.user !== "undefined" ? (
               <div>
                 <CustomNavBar
                   logged_in={logged_in}

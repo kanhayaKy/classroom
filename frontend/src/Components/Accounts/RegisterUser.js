@@ -24,7 +24,8 @@ class RegisterForm extends React.Component {
 
   sendRegistration = (event) => {
     event.preventDefault();
-    const { first_name, last_name, username, uid, password , checked} = this.state;
+    const { first_name, last_name, username, uid, password, checked } =
+      this.state;
     Axios.post(base_url + "users/create", {
       user: {
         UID: uid,
@@ -32,7 +33,7 @@ class RegisterForm extends React.Component {
         last_name: last_name,
         username: username,
         password: password,
-        Role: checked ?"TR" :"ST",
+        Role: checked ? "TR" : "ST",
       },
     })
       .then((response) => {
@@ -50,18 +51,17 @@ class RegisterForm extends React.Component {
 
   changeHandler = (event) => {
     event.preventDefault();
-    console.log(event)
+    console.log(event);
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
 
   checkHandler = (event) => {
-    
     this.setState({
-      checked:event.target.checked,
-    })
-  }
+      checked: event.target.checked,
+    });
+  };
 
   clearForm = () => {
     this.setState({
@@ -77,20 +77,9 @@ class RegisterForm extends React.Component {
   render() {
     return (
       <div className="container">
-        <Form
-          onSubmit={this.sendRegistration}
-          noValidate
-          className="register-form form-box"
-        >
-          <Form.Group controlId="formPlaintextEmail" className="center">
-            <Form.Label>Faculty</Form.Label>
-            <Checkbox
-              name="checked"
-              checked={this.state.checked}
-              onChange={this.checkHandler}
-              inputProps={{ "aria-label": "primary checkbox" }}
-            />
-          </Form.Group>
+        <Form onSubmit={this.sendRegistration} noValidate className="form-box">
+          <h1>Register </h1>
+
           <Form.Group controlId="formPlaintextEmail" className="center">
             <Form.Label>First Name</Form.Label>
             <Form.Control
@@ -144,7 +133,17 @@ class RegisterForm extends React.Component {
               name="password"
             />
           </Form.Group>
-          {this.state.submitted ? <Redirect to="/login" /> : <React.Fragment/>}
+          <Form.Group controlId="formPlaintextEmail" className="center">
+            <Form.Label>Faculty</Form.Label>
+            <Checkbox
+              name="checked"
+              color="default"
+              checked={this.state.checked}
+              onChange={this.checkHandler}
+              inputProps={{ "aria-label": "checkbox with default color" }}
+            />
+          </Form.Group>
+          {this.state.submitted ? <Redirect to="/login" /> : <React.Fragment />}
           <div className="submitButton">
             <Button type="submit" variant="primary" size="lg" block>
               Register
