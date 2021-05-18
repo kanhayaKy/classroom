@@ -72,8 +72,8 @@ This project is implemented using python , Javascript , React , HTML ,CSS  that 
     - This is the main page for the classroom , it has an option to view all the students and the faculty of that classroom .
     - It has an assignments section where the students can see all the assignments , clicking on each assignment will take them to a page where they can see the details of the assignment and will be able to submit the the same.
     - ##### Create Assignment
-     The faculty will have an option to create an assignment.
+        The faculty will have an option to create an assignment.
    
     - ##### Delete Classroom 
-    faculty should have an option to close the class , after which the classroom becomes inactive.
+        faculty should have an option to close the class , after which the classroom becomes inactive.
     
