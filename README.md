@@ -52,7 +52,7 @@ The `materials` folder contains the static data that will be uploaded into the a
 
 # Specifications:
 
-This project is implemented using python , Javascript , React , HTML ,CSS  that allows the students/ teachers to maintain their classrooms , assignments and study materials. 
+This project is implemented using python , Javascript , React , HTML ,CSS  that allows the students/ teachers to maintain their classrooms , assignments and study materials. This project is more complex than the rest of the projects because the frontend is made using Javascripts React library.
 
 - #### Login & Registration
     - A new user can register themselves to the site using the required credentials , they should select their role compulsorily if they are a faculty they have to enter a faculty id else they have to provide a student id . 
