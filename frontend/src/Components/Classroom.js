@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   topCard: {
     backgroundColor: "#3f51b5",
     borderRadius: "2rem",
-    height: "25vh",
+    height: "16rem",
     maxWidth: "45%",
     margin: "6vh auto",
     textAlign: "center",

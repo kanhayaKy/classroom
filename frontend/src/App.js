@@ -74,16 +74,17 @@ class App extends Component {
             user: json.user,
           });
           this.getClasses();
-          auth = false;
           console.log(auth);
         }
+        else
+        return auth;
+
       
       })
       .catch((error) => {
         console.log(error);
       });
 
-      return auth;
 
   };
 

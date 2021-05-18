@@ -39,6 +39,7 @@ function Home(props) {
         <p style={{"font-size":"small"}}>Signed in as {props.user.Role === "ST"? "Student" : "Faculty"}</p>
       </Typography>
 
+
       <Container>
         {props.logged_in && <CardList classrooms={props.classes} />}
       </Container>
