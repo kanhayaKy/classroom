@@ -64,12 +64,16 @@ This project is implemented using python , Javascript , React , HTML ,CSS  that 
 	
 - #### Create Page
     - This page should have a form that allows a faculty to create a new classroom 
+
+- #### Join Page
     - The same page should load another form for the students to join the classroom using the classroom's code.
 
 - #### Classroom page
     - This is the main page for the classroom , it has an option to view all the students and the faculty of that classroom .
     - It has an assignments section where the students can see all the assignments , clicking on each assignment will take them to a page where they can see the details of the assignment and will be able to submit the the same.
-    - The faculty will have an option to create an assignment.
-    -  Announcements / Notification section for important updates about the class . 
-    - faculty should have an option to close the class , after which the classroom becomes inactive.
+    - ##### Create Assignment
+     The faculty will have an option to create an assignment.
+   
+    - ##### Delete Classroom 
+    faculty should have an option to close the class , after which the classroom becomes inactive.
     
