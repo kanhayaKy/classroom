@@ -25,7 +25,7 @@ The project consists of a django project `capstone` that contains an app called 
 
 
 #### Frontend
-The frontend of this application is made using `ReactJs` which follows the reqular file structure of a react app. `frontend/public` has an `index.html` file which is the main page for the application and all the components get's injected into it. 
+The frontend of this application is made using `ReactJs` which follows the regular file structure of a react app. `frontend/public` has an `index.html` file which is the main page for the application and all the components get's injected into it. 
 `frontend/src/App.js` controls the entire application and has the necessary functions. `frontend/src/components` consits of different components required that are rendered into the page. 
 `frontend/package.json` contains the dependencies required for the project. 
 
