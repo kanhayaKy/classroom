@@ -50,9 +50,9 @@ The `materials` folder contains the static data that will be uploaded into the a
 - `POST /materials`: sending a `POST` request to  `/materials` will add the material to the database.
 
 
-# Specifications:
+# Distinctiveness and Complexity:
 
-This project is implemented using python , Javascript , React , HTML ,CSS  that allows the students/ teachers to maintain their classrooms , assignments and study materials. This project is more complex than the rest of the projects because the frontend is made using Javascripts React library.
+This project is implemented using python , Javascript , React , HTML ,CSS  that allows the students/ teachers to maintain their classrooms , assignments and study materials. This project is more complex than the rest of the projects because the frontend is made using Javascripts React library.The distinctiveness of this project can be seen in the specifications of the project that are listed below 
 
 - #### Login & Registration
     - A new user can register themselves to the site using the required credentials , they should select their role compulsorily if they are a faculty they have to enter a faculty id else they have to provide a student id . 
